@@ -18,5 +18,22 @@ namespace VeterinarySlices.API.Controllers
             this._mediatrSender = sender;
             this._accountsLogger = logger;
         }
+
+        [HttpPost]
+        [Route("/create")]
+        [Produces(MediaTypeNames.Application.Json)]
+        public async Task<IActionResult> CreateAccount([FromBody] CreateAccountCommand command)
+        {
+            try
+            {
+                var accountId = await this._mediatrSender.Send(command);
+                return Ok(accountId);
+            }
+            catch (TaskCanceledException exception)
+            {
+                this._accountsLogger.LogCritical(exception.Message);
+                return StatusCode(500);
+            }
+        }
     }
 }
