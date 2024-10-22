@@ -11,12 +11,9 @@ namespace VeterinarySlices.API.Controllers
     {
         private readonly ISender _mediatrSender;
 
-        private readonly ILogger<AccountsController> _accountsLogger;
-
-        public AccountsController(ISender sender, ILogger<AccountsController> logger)
+        public AccountsController(ISender sender)
         {
             this._mediatrSender = sender;
-            this._accountsLogger = logger;
         }
 
         [HttpPost]
@@ -24,16 +21,8 @@ namespace VeterinarySlices.API.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         public async Task<IActionResult> CreateAccount([FromBody] CreateAccountCommand command)
         {
-            try
-            {
-                var accountId = await this._mediatrSender.Send(command);
-                return Ok(accountId);
-            }
-            catch (TaskCanceledException exception)
-            {
-                this._accountsLogger.LogCritical(exception.Message);
-                return StatusCode(500);
-            }
+            var accountId = await this._mediatrSender.Send(command);
+            return Ok(accountId);
         }
     }
 }
