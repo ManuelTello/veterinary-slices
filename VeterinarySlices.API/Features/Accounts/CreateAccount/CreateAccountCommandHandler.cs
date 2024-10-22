@@ -4,13 +4,16 @@ using VeterinarySlices.API.Entities;
 
 namespace VeterinarySlices.API.Features.Accounts.CreateAccount
 {
-    internal sealed class Handler : IRequestHandler<CreateAccountCommand, CreateAccountResponse>
+    internal sealed class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand, CreateAccountResponse>
     {
         private readonly VeterinaryDataContext _databaseContext;
 
-        public Handler(VeterinaryDataContext context)
+        private readonly ILogger<CreateAccountCommandHandler> _handlerLogger;
+
+        public CreateAccountCommandHandler(VeterinaryDataContext context, ILogger<CreateAccountCommandHandler> logger)
         {
             this._databaseContext = context;
+            this._handlerLogger = logger;
         }
 
         public async Task<CreateAccountResponse> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
