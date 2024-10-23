@@ -22,7 +22,14 @@ namespace VeterinarySlices.API.Controllers
         public async Task<IActionResult> GetAccountById(string id)
         {
             var account = await this._mediatrSender.Send(new GetAccountByIdQuery() { AccountId = Guid.Parse(id) });
-            return Ok(account);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(account);
+            }
         }
 
         [HttpPost]
