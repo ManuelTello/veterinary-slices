@@ -20,7 +20,7 @@ namespace VeterinarySlices.API.Controllers
 
         [HttpPost]
         [Produces(MediaTypeNames.Application.Json)]
-        [Route("/email")]
+        [Route("email")]
         public async Task<IActionResult> GetAccountByEmail(GetAccountByEmailQuery query)
         {
             var account = await this._mediatrSender.Send(query);
@@ -34,11 +34,12 @@ namespace VeterinarySlices.API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Produces(MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> GetAccountById(string id)
+        [Route("id")]
+        public async Task<IActionResult> GetAccountById(GetAccountByIdQuery query)
         {
-            var account = await this._mediatrSender.Send(new GetAccountByIdQuery() { AccountId = Guid.Parse(id) });
+            var account = await this._mediatrSender.Send(query);
             if (account == null)
             {
                 return NotFound();
@@ -50,7 +51,7 @@ namespace VeterinarySlices.API.Controllers
         }
 
         [HttpPost]
-        [Route("/create")]
+        [Route("create")]
         [Produces(MediaTypeNames.Application.Json)]
         public async Task<IActionResult> CreateAccount([FromBody] CreateAccountCommand command)
         {
