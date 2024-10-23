@@ -2,6 +2,7 @@ using System.Net.Mime;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VeterinarySlices.API.Features.Accounts.CreateAccount;
+using VeterinarySlices.API.Features.Accounts.GetAccountByEmail;
 using VeterinarySlices.API.Features.Accounts.GetAccountById;
 
 namespace VeterinarySlices.API.Controllers
@@ -17,7 +18,23 @@ namespace VeterinarySlices.API.Controllers
             this._mediatrSender = sender;
         }
 
-        [HttpGet("{id}")]
+        [HttpPost]
+        [Produces(MediaTypeNames.Application.Json)]
+        [Route("/email")]
+        public async Task<IActionResult> GetAccountByEmail(GetAccountByEmailQuery query)
+        {
+            var account = await this._mediatrSender.Send(query);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(account);
+            }
+        }
+
+        [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         public async Task<IActionResult> GetAccountById(string id)
         {
