@@ -19,35 +19,36 @@ namespace VeterinarySlices.API.Controllers
             this._mediatrSender = sender;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("email")]
-        public async Task<IActionResult> GetAccountByEmail(GetAccountByEmailQuery query)
+        public async Task<IActionResult> GetAccountByEmail([FromBody] GetAccountByEmailQuery query)
         {
-            var account = await this._mediatrSender.Send(query);
-            if (account == null)
+            var result = await this._mediatrSender.Send(query);
+            if (result == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(account);
+                return Ok(result);
             }
         }
-
-        [HttpPost]
+    
+        [HttpGet]
         [Produces(MediaTypeNames.Application.Json)]
         [Route("id")]
-        public async Task<IActionResult> GetAccountById(GetAccountByIdQuery query)
+        public async Task<IActionResult> GetAccountById([FromBody] GetAccountByIdQuery query)
         {
-            var account = await this._mediatrSender.Send(query);
-            if (account == null)
+            var result = await this._mediatrSender.Send(query);
+
+            if (result == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(account);
+                return Ok(result);
             }
         }
 
@@ -56,8 +57,8 @@ namespace VeterinarySlices.API.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateAccountCommand command)
         {
-            var accountId = await this._mediatrSender.Send(command);
-            return Ok(accountId);
+            await this._mediatrSender.Send(command);
+            return Ok();
         }
 
         [HttpDelete]
@@ -65,8 +66,8 @@ namespace VeterinarySlices.API.Controllers
         [Route("delete")]
         public async Task<IActionResult> DeleteAccount([FromBody] DeleteAccountCommand command)
         {
-            var response = await this._mediatrSender.Send(command);
-            return Ok(response);
+            await this._mediatrSender.Send(command);
+            return Ok();
         }
     }
 }
