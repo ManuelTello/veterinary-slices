@@ -2,7 +2,7 @@ using MediatR;
 
 namespace VeterinarySlices.API.Features.Accounts.CreateAccount
 {
-    public class CreateAccountCommand : IRequest<CreateAccountResponse>
+    public class CreateAccountCommand : IRequest
     {
         public string Email { get; set; } = string.Empty;
 

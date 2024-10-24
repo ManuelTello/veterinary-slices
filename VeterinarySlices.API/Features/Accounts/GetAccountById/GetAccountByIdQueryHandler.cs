@@ -9,12 +9,10 @@ namespace VeterinarySlices.API.Features.Accounts.GetAccountById
     {
         private readonly VeterinaryDataContext _databaseContext;
 
-        private readonly ILogger<GetAccountByIdQueryHandler> _handlerLogger;
 
-        public GetAccountByIdQueryHandler(VeterinaryDataContext context, ILogger<GetAccountByIdQueryHandler> logger)
+        public GetAccountByIdQueryHandler(VeterinaryDataContext context)
         {
             this._databaseContext = context;
-            this._handlerLogger = logger;
         }
 
         public async Task<GetAccountByIdQueryResponse?> Handle(GetAccountByIdQuery request, CancellationToken cancellationToken)
@@ -30,6 +28,7 @@ namespace VeterinarySlices.API.Features.Accounts.GetAccountById
                     FullName = account.FullName,
                     DateCreated = account.DateCreated
                 };
+
                 return response;
             }
             else

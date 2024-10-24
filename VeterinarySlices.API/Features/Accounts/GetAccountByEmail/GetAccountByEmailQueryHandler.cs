@@ -9,28 +9,27 @@ namespace VeterinarySlices.API.Features.Accounts.GetAccountByEmail
     {
         private readonly VeterinaryDataContext _databaseContext;
 
-        private readonly ILogger<GetAccountByEmailQueryHandler> _handlerLogger;
-
-        public GetAccountByEmailQueryHandler(VeterinaryDataContext context, ILogger<GetAccountByEmailQueryHandler> logger)
+        public GetAccountByEmailQueryHandler(VeterinaryDataContext context)
         {
             this._databaseContext = context;
-            this._handlerLogger = logger;
         }
 
         public async Task<GetAccountByEmailQueryResponse?> Handle(GetAccountByEmailQuery request, CancellationToken cancellationToken)
         {
             Account? account = await this._databaseContext.Accounts.SingleOrDefaultAsync(account => account.Email == request.AccountEmail);
+
             if (account != null)
             {
                 GetAccountByEmailQueryResponse response = new GetAccountByEmailQueryResponse()
                 {
                     Id = account.Id,
                     Email = account.Email,
-                    Password = account.Password,
                     FullName = account.FullName,
+                    Password = account.Password,
                     DateCreated = account.DateCreated,
                 };
                 return response;
+
             }
             else
             {

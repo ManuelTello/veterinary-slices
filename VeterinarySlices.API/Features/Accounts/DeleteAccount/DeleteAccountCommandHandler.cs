@@ -4,19 +4,16 @@ using VeterinarySlices.API.Entities;
 
 namespace VeterinarySlices.API.Features.Accounts.DeleteAccount
 {
-    internal sealed class DeleteAccountCommandHandler : IRequestHandler<DeleteAccountCommand, DeleteAccountCommandResponse>
+    internal sealed class DeleteAccountCommandHandler : IRequestHandler<DeleteAccountCommand>
     {
         private readonly VeterinaryDataContext _databaseContext;
 
-        private readonly ILogger<DeleteAccountCommandHandler> _handlerLogger;
-
-        public DeleteAccountCommandHandler(VeterinaryDataContext context, ILogger<DeleteAccountCommandHandler> logger)
+        public DeleteAccountCommandHandler(VeterinaryDataContext context)
         {
             this._databaseContext = context;
-            this._handlerLogger = logger;
         }
 
-        public async Task<DeleteAccountCommandResponse> Handle(DeleteAccountCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteAccountCommand request, CancellationToken cancellationToken)
         {
             Account account = new Account()
             {
@@ -25,13 +22,6 @@ namespace VeterinarySlices.API.Features.Accounts.DeleteAccount
 
             this._databaseContext.Accounts.Remove(account);
             await this._databaseContext.SaveChangesAsync(cancellationToken);
-
-            DeleteAccountCommandResponse response = new DeleteAccountCommandResponse()
-            {
-                RemovedId = request.AccountId
-            };
-
-            return response;
         }
     }
 }
